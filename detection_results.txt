@@ -1,0 +1,21 @@
+Frame-by-frame detection results:
+Frame 0: Fake (0.53)
+Frame 30: Fake (0.54)
+Frame 60: Fake (0.55)
+Frame 90: Fake (0.53)
+Frame 120: Fake (0.52)
+Frame 150: Fake (0.54)
+Frame 180: Fake (0.53)
+Frame 210: Fake (0.52)
+Frame 240: Fake (0.53)
+Frame 270: Fake (0.52)
+Frame 300: Fake (0.51)
+Frame 330: Fake (0.51)
+Frame 360: Fake (0.52)
+Frame 390: Fake (0.54)
+Frame 420: Fake (0.55)
+
+--- Final Decision ---
+Total Fake frames: 15
+Total Real frames: 0
+Result: The video is likely a DEEPFAKE (FAKE).
