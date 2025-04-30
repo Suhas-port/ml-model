@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styless.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="grid-container">
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="police-badge">
+                    <img src="{{ url_for('static', filename='images/Seal_of_Karnataka.svg.png') }}" alt="Karnataka Police">
+                </div>
+                <h1>Namma Nijavaani</h1>
+                <span class="beta-tag">BETA</span>
+            </div>
+            <nav class="header-nav">
+                <ul>
+                    <li class="active"><a href="#"><i class="fas fa-search"></i> Detector</a></li>
+                    <li><a href="#"><i class="fas fa-database"></i> Cases</a></li>
+                    <li><a href="#"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main class="app-main">
+            <div class="detection-container">
+                <div class="detection-header">
+                    <h2><i class="fas fa-fingerprint"></i> Deepfake Scanner</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-history"></i> History
+                        </button>
+                        <button class="btn btn-primary" id="quickScanBtn">
+                            <i class="fas fa-bolt"></i> Quick Scan
+                        </button>
+                    </div>
+                </div>
+                <div class="detection-body">
+                    <div class="upload-section">
+                        <form id="uploadForm" enctype="multipart/form-data" action="{{ url_for('analyze') }}" method="POST">
+                            <input type="file" id="videoInput" name="video" accept="video/*" required />
+                            <button type="submit">Upload Video</button>
+                        </form>
+                        <div id="result"></div>
+                    </div>
+                    <div class="results-section" id="resultsSection">
+                        <div class="results-header">
+                            <h3><i class="fas fa-clipboard-check"></i> Analysis Results</h3>
+                            <div class="results-meta">
+                                <span class="badge" id="resultBadge">Processing...</span>
+                                <span class="timestamp" id="resultTimestamp"></span>
+                            </div>
+                        </div>
+                        <div class="results-body">
+                            <div class="confidence-meter">
+                                <div class="meter-labels">
+                                    <span>Genuine</span>
+                                    <span id="confidenceValue">0%</span>
+                                    <span>Fake</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-fill" id="meterFill"></div>
+                                </div>
+                            </div>
+                            <div class="results-details">
+                                <div class="detail-card">
+                                    <h4><i class="fas fa-eye"></i> Visual Analysis</h4>
+                                    <ul class="detail-list" id="visualDetails">
+                                    </ul>
+                                </div>
+                                <div class="detail-card">
+                                    <h4><i class="fas fa-waveform"></i> Audio Analysis</h4>
+                                    <ul class="detail-list" id="audioDetails">
+                                    </ul>
+                                </div>
+                                <div class="detail-card">
+                                    <h4><i class="fas fa-flag"></i> Report</h4>
+                                    <p>Found something suspicious? Report it to authorities.</p>
+                                    <button class="btn btn-report">
+                                        <i class="fas fa-exclamation-triangle"></i> Flag Content
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-container">
+                <div class="stats-card">
+                    <h3><i class="fas fa-chart-pie"></i> Today's Stats</h3>
+                    <div class="stat-item">
+                        <div class="stat-icon bg-blue">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="genuineCount">24</span>
+                            <span class="stat-label">Genuine Files</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon bg-red">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="fakeCount">5</span>
+                            <span class="stat-label">Potential Fakes</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon bg-purple">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="avgTime">1.2s</span>
+                            <span class="stat-label">Avg. Analysis Time</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="recent-card">
+                    <h3><i class="fas fa-history"></i> Recent Scans</h3>
+                    <ul class="scan-list" id="recentScans">
+                    </ul>
+                </div>
+                <div class="video-preview-card" id="videoPreviewCard" style="display: none;">
+                    <h3><i class="fas fa-video"></i> Deepfake Video Preview</h3>
+                    <div class="video-container">
+                        <video id="previewVideo" controls>
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="watermark-overlay">
+                            <div class="watermark-text">DEEPFAKE DETECTED</div>
+                            <div class="watermark-disclaimer">This video has been identified as a deepfake. Please use this information responsibly.</div>
+                    </div>
+                    <div class="video-actions">
+                        <button class="btn btn-download" id="downloadWatermarked">
+                            <i class="fas fa-download"></i> Download Watermarked Video
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div class="scanning-animation" id="scanningAnimation" style="display: none;">
+        <div class="scanner-line"></div>
+        <p>Scanning in progress...</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html> 
